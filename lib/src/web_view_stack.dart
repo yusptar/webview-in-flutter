@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewStack extends StatefulWidget {
-  const WebViewStack({required this.controller, Key? key}) : super(key: key);
+  const WebViewStack({Key? key, required this.controller}) : super(key: key);
 
   final Completer<WebViewController> controller;
 
@@ -38,26 +38,15 @@ class _WebViewStackState extends State<WebViewStack> {
               loadingPercentage = 100;
             });
           },
-          navigationDelegate: (navigation) {
-            final host = Uri.parse(navigation.url).host;
-            if (host.contains('youtube.com')) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    'Blocking navigation to $host',
-                  ),
-                ),
-              );
-              return NavigationDecision.prevent;
-            }
-            return NavigationDecision.navigate;
-          },
           javascriptMode: JavascriptMode.unrestricted,
           javascriptChannels: _createJavascriptChannels(context),
         ),
         if (loadingPercentage < 100)
           LinearProgressIndicator(
             value: loadingPercentage / 100.0,
+            backgroundColor: Colors.orangeAccent,
+            valueColor: AlwaysStoppedAnimation(Colors.blue),
+            minHeight: 25,
           ),
       ],
     );
